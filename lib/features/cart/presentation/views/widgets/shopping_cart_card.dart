@@ -59,7 +59,6 @@ class ShoppingCartCard extends ConsumerWidget {
           icon: const Icon(Icons.delete),
         ),
       ),
-      
     );
   }
 }

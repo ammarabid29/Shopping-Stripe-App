@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:shopping_stripe_app/core/consts/consts.dart';
 import 'package:shopping_stripe_app/features/splash/splash_screen.dart';
 
-void main() {
+void main() async {
+  await _setup();
   runApp(
     const ProviderScope(child: MyApp()),
   );
+}
+
+Future<void> _setup() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = stripePublishableKey;
 }
 
 class MyApp extends StatelessWidget {

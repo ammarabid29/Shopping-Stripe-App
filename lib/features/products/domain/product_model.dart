@@ -6,7 +6,7 @@ class ProductModel {
   final String id;
   final String name;
   final String image;
-  final double price;
+  final int price;
   final int quantity;
 
   ProductModel({
