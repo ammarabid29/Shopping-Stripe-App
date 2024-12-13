@@ -13,11 +13,11 @@ class ShoppingCartNotifier extends StateNotifier<List<ProductModel>> {
 
   void addProduct(ProductModel product) {
     final exist = state.any((p) => p.id == product.id);
-
     if (exist) {
       state = state.map((p) {
         if (p.id == product.id) {
           return ProductModel(
+            id: p.id,
             name: p.name,
             image: p.image,
             price: p.price,
@@ -40,6 +40,7 @@ class ShoppingCartNotifier extends StateNotifier<List<ProductModel>> {
             if (p.id == product.id) {
               return p.quantity > 1
                   ? ProductModel(
+                      id: p.id,
                       name: p.name,
                       image: p.image,
                       price: p.price,

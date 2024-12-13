@@ -1,36 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shopping_stripe_app/features/cart/presentation/view_models/cart_view_model.dart';
+import 'package:shopping_stripe_app/features/products/domain/product_model.dart';
 
-class ProductCard extends StatefulWidget {
+class ProductCard extends ConsumerWidget {
   const ProductCard({
     super.key,
-    required this.image,
-    required this.title,
-    required this.price,
-    required this.addToCart,
-    required this.isAdded,
+    required this.product,
   });
-  final String image;
-  final String title;
-  final double price;
-  final Function(bool isAdded) addToCart;
-  final bool isAdded;
+  final ProductModel product;
 
   @override
-  State<ProductCard> createState() => _ProductCardState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cartProducts = ref.watch(shoppingCartProvider);
+    final isAdded = cartProducts.any((p) => p.id == product.id);
 
-class _ProductCardState extends State<ProductCard> {
-  bool isAdded = false;
+    void toggleCart() {
+      if (isAdded) {
+        ref.read(shoppingCartProvider.notifier).removeProduct(product);
+      } else {
+        ref.read(shoppingCartProvider.notifier).addProduct(product);
+      }
+    }
 
-  void toggleCart() {
-    setState(() {
-      isAdded = !isAdded;
-    });
-    widget.addToCart(isAdded);
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(10),
       decoration: const BoxDecoration(
@@ -39,16 +31,16 @@ class _ProductCardState extends State<ProductCard> {
       child: Column(
         children: [
           Image.asset(
-            widget.image,
+            product.image,
             height: 136,
             width: 164,
           ),
           const SizedBox(height: 12),
           Text(
-            widget.title,
+            product.name,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          Text("\$${widget.price}"),
+          Text("\$${product.price}"),
           ElevatedButton.icon(
             onPressed: toggleCart,
             icon: Icon(isAdded ? Icons.check : Icons.add_shopping_cart),

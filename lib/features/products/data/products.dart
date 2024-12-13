@@ -17,7 +17,7 @@ List<ProductModel> products = [
     price: 800.00,
   ),
   ProductModel(
-    name: "Pink Dress",
+    name: "Dress",
     image: "assets/images/pinkdress.png",
     price: 200.00,
   ),
