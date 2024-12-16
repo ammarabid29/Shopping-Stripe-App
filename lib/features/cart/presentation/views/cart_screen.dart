@@ -74,7 +74,7 @@ class ShoppingCartScreen extends ConsumerWidget {
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
-                    StripeService.instance.makePayments(totalAmount);
+                    StripeService.instance.makePayments(totalAmount, ref);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,

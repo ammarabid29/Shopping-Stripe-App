@@ -1,13 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:shopping_stripe_app/core/consts/consts.dart';
+import 'package:shopping_stripe_app/features/cart/presentation/view_models/cart_view_model.dart';
 
 class StripeService {
   StripeService._();
 
   static final StripeService instance = StripeService._();
 
-  Future<void> makePayments(int amount) async {
+  Future<void> makePayments(int amount, WidgetRef ref) async {
     try {
       String? paymentIntentClientSecret =
           await _createPaymentIntent(amount, "usd");
@@ -19,7 +21,7 @@ class StripeService {
             merchantDisplayName: "Ammar Abid"),
       );
 
-      await _processPayment();
+      await _processPayment(ref);
     } catch (e) {
       print(e);
     }
@@ -52,9 +54,11 @@ class StripeService {
     return null;
   }
 
-  Future<void> _processPayment() async {
+  Future<void> _processPayment(WidgetRef ref) async {
     try {
       await Stripe.instance.presentPaymentSheet();
+      ref.read(shoppingCartProvider.notifier).clearCart();
+      await Stripe.instance.confirmPaymentSheetPayment();
     } catch (e) {
       print(e);
     }
